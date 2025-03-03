@@ -33,6 +33,10 @@ app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/client/index.html');
 });
 
+app.get('/healthcheck', (req: Request, res: Response) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 // Initialize the websocket server
 initializeWebsocketServer(server);
 
