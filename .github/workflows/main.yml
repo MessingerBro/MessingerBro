@@ -1,0 +1,57 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: [self-hosted, Linux, ARM64, luis]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: npm run lint
+
+  test:
+    runs-on: [self-hosted, Linux, ARM64, luis]
+    needs: lint  # Ensures linting passes before running tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: npm run test
+
+  build:
+    runs-on: [self-hosted, Linux, ARM64, luis]
+    needs: test  # Ensures tests pass before building
+    steps:   
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: npm run build
+
+  docker:
+    runs-on: [self-hosted, Linux, ARM64, luis]
+    needs: build  # Its Ensures build succeeds before Docker build
+    steps:
+      - uses: actions/checkout@v4
+      - 
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: augipro2/messingerbro:1.0.0
