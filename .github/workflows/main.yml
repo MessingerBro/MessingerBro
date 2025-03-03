@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   lint:
-    runs-on: self-hosted
+    runs-on: luis
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
