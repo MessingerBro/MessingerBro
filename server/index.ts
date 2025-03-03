@@ -10,9 +10,9 @@ import { WebSocket } from 'ws';
 const app = express();
 const server = http.createServer(app);
 
-const myVar = 1;
+// Removed unused variable `myVar`
 
-// create a livereload server
+// Create a livereload server
 const env = process.env.NODE_ENV || 'development';
 if (env !== 'production' && env !== 'test') {
   const liveReloadServer = livereload.createServer();
@@ -21,20 +21,22 @@ if (env !== 'production' && env !== 'test') {
       liveReloadServer.refresh('/');
     }, 100);
   });
-  // use livereload middleware
+  // Use livereload middleware
   app.use(connectLiveReload());
 }
 
-// deliver static files from the client folder like css, js, images
+// Deliver static files from the client folder like CSS, JS, images
 app.use(express.static('client'));
-// route for the homepage
+
+// Route for the homepage
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/client/index.html');
 });
+
 // Initialize the websocket server
 initializeWebsocketServer(server);
 
-//start the web server
+// Start the web server
 const startServer = (serverPort: number) => {
   server.listen(serverPort, () => {
     console.log(`Express Server started on port ${serverPort} as '${env}' Environment`);
@@ -43,15 +45,16 @@ const startServer = (serverPort: number) => {
 };
 
 if (env !== 'test') {
-  const serverPort = parseInt(process.env.PORT || '3000');
+  const serverPort = parseInt(process.env.PORT || '3000', 10);
   startServer(serverPort);
 }
 
-const waitForSocketState = (socket: WebSocket, state: any) => {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
+// Explicitly type `state` as `number` instead of `any`
+const waitForSocketState = (socket: WebSocket, state: number): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
       if (socket.readyState === state) {
-        resolve(undefined);
+        resolve();
       } else {
         waitForSocketState(socket, state).then(resolve);
       }

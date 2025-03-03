@@ -13,7 +13,8 @@ export interface Message {
   message?: string;
 }
 
-export interface DebouncedFunction<T extends (...args: any[]) => any> {
+// Improved generic typing for `DebouncedFunction`
+export interface DebouncedFunction<T extends (...args: unknown[]) => unknown> {
   (...args: Parameters<T>): ReturnType<T>;
   cancel: () => void;
   flush: () => void;
