@@ -21,7 +21,9 @@
         break;
       case 'activeUsers':
         activeUsers = message.users;
-        break;
+        document.getElementById('activeUsers').textContent =
+          `Connected users: ${activeUsers.length}`;
+        break;        
       case 'typing':
         typingUsers = message.users;
         break;
