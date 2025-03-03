@@ -13,7 +13,8 @@ export interface Message {
   message?: string;
 }
 
-export interface DebouncedFunction extends Function {
+export interface DebouncedFunction<T extends (...args: any[]) => any> {
+  (...args: Parameters<T>): ReturnType<T>;
   cancel: () => void;
   flush: () => void;
 }

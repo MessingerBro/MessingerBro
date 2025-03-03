@@ -55,10 +55,10 @@ const removeTypingStatus = (userId: string) => {
     });
   }
 };
-const typingUsersDebounced: { [key: string]: DebouncedFunction } = {};
+const typingUsersDebounced: { [key: string]: DebouncedFunction<() => void> } = {};
 
 // If a new message is received, the onMessage function is called
-  const onMessage = (ws: WebSocket, message: RawData) => {
+const onMessage = (ws: WebSocket, message: RawData) => {
   const messageObject = JSON.parse(message.toString()) as Message;
   console.log('Message received', messageObject);
   switch (messageObject.type) {
@@ -93,7 +93,7 @@ const typingUsersDebounced: { [key: string]: DebouncedFunction } = {};
           users: typingUsers,
         });
       }
-        typingUsersDebounced[messageObject.user.id] = debounce(() => {
+      typingUsersDebounced[messageObject.user.id] = debounce(() => {
         if (!messageObject.user?.id) return;
         removeTypingStatus(messageObject.user.id);
       }, 2000);
@@ -105,4 +105,4 @@ const typingUsersDebounced: { [key: string]: DebouncedFunction } = {};
   }
 };
 
- export { initializeWebsocketServer };
+export { initializeWebsocketServer };
