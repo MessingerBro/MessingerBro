@@ -30,7 +30,7 @@ const onConnection = (ws: WebSocket) => {
 };
 
 // If a connection is closed, the onClose function is called
-const onClose = (ws: WebSocket) => {
+const onClose = async (ws: WebSocket) => {
   console.log('Websocket connection closed');
   const userIndex = activeUsers.findIndex((user) => user.ws === ws);
   if (userIndex !== -1) {
