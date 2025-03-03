@@ -25,8 +25,14 @@ const initializeWebsocketServer = (server: Server) => {
 // If a new connection is established, the onConnection function is called
 const onConnection = (ws: WebSocket) => {
   console.log('New websocket connection');
+
   ws.on('message', (message) => onMessage(ws, message));
-  ws.on('close', () => onClose(ws));
+  ws.on('close', () => {
+    onClose(ws);
+    broadcastActiveUsers();
+  });
+
+  broadcastActiveUsers();
 };
 
 // If a connection is closed, the onClose function is called
@@ -66,6 +72,7 @@ const onMessage = (ws: WebSocket, message: RawData) => {
       if (!messageObject.user?.id || activeUsers.find((user) => user.id === messageObject.user?.id)) return;
       activeUsers.push({ ...messageObject.user, ws });
       console.log('New user connected:', messageObject.user?.name);
+      broadcastActiveUsers();
       broadcastMessage({
         type: 'activeUsers',
         users: activeUsers.map((user) => ({ id: user.id, name: user.name })),
@@ -103,6 +110,15 @@ const onMessage = (ws: WebSocket, message: RawData) => {
     default:
       break;
   }
+};
+
+const broadcastActiveUsers = () => {
+  const activeUserList = activeUsers.map((user) => ({ id: user.id, name: user.name }));
+  websocketServer.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ type: 'activeUsers', users: activeUserList }));
+    }
+  });
 };
 
 export { initializeWebsocketServer };

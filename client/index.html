@@ -11,21 +11,22 @@
     <script src="/script.js"></script>
   </head>
   <body>
-    <div class="w-full h-screen flex justify-center">
-      <div class="max-w-2xl w-full md:w-3/4 lg:w-2/4 bg-white flex flex-col h-full">
-        <div class="bg-blue-500 px-4 py-4 rounded-b">
+    <div class="w-full h-screen flex justify-center bg-black/90">
+      <div class="max-w-2xl w-full md:w-3/4 lg:w-2/4 flex flex-col h-full">
+        <div class="bg-gray-600 px-4 py-4 rounded-b">
           <p class="text-lg font-bold text-white">LB1 Chat - M324</p>
+          <p class="text-sm" id="activeUsers">Connected users: 0</p>
         </div>
         <div id="typingStatus" class="text-gray-500 text-sm px-4 py-2" style="display: none"></div>
         <div class="flex-grow flex flex-col justify-start p-4 gap-4 overflow-y-auto" id="messages"></div>
-        <div class="bg-gray-100 px-4 py-4 flex items-center rounded-t">
+        <div class="bg-gray-600 px-4 py-4 flex items-center rounded-t">
           <input
             id="messageInput"
             type="text"
             placeholder="Type a message"
-            class="flex-grow px-4 py-2 rounded-full border-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+            class="flex-grow px-4 py-2 rounded-full border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
-          <button class="ml-4 text-cyan-300 hover:text-cyan-400 focus:outline-none" id="sendButton">
+          <button class="ml-4 text-white hover:text-blue-300 focus:outline-none" id="sendButton">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6"
