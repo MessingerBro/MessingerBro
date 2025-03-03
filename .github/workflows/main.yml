@@ -37,7 +37,7 @@ jobs:
 
   docker:
     runs-on: self-hosted
-    needs: build  # Ensures build succeeds before Docker build
+    needs: build  # Its Ensures build succeeds before Docker build
     steps:
       - uses: actions/checkout@v4
       - 
