@@ -21,9 +21,19 @@
         break;
       case 'activeUsers':
         activeUsers = message.users;
-        document.getElementById('activeUsers').textContent =
-          `Connected users: ${activeUsers.length}`;
-        break;        
+          
+        // Update count
+        document.getElementById('activeUsersCount').textContent = activeUsers.length;
+        
+        // Update list of online users
+        const userList = document.getElementById('activeUsersList');
+        userList.innerHTML = ''; // Clear previous list
+        activeUsers.forEach(user => {
+          const listItem = document.createElement('li');
+          listItem.textContent = user.name;
+          userList.appendChild(listItem);
+        });
+        break;               
       case 'typing':
         typingUsers = message.users;
         updateTypingStatus();
