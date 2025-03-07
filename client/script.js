@@ -26,6 +26,7 @@
         break;        
       case 'typing':
         typingUsers = message.users;
+        updateTypingStatus();
         break;
       default:
         break;
@@ -60,4 +61,20 @@
       document.getElementById('messageInput').value = '';
     }
   });
+
+  function updateTypingStatus() {
+    const typingStatusElement = document.getElementById('typingStatus'); // Get the typing status
+
+    // Remove my user from the list of typing users
+    const otherTypingUsers = typingUsers.filter((user) => user.id !== myUser.id);
+
+    // Update the typing status
+    if (otherTypingUsers.length > 0) {
+      const names = otherTypingUsers.map((user) => user.name).join(', ');
+      typingStatusElement.innerText = `${names} is writing...`;
+      typingStatusElement.style.display = 'block';
+    } else {
+      typingStatusElement.style.display = 'none';
+    }
+  }
 })();
