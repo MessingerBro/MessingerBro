@@ -17,4 +17,4 @@ COPY . .
 RUN npm run lint && npm test && npm run build
 
 # Start the server when the container starts
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
