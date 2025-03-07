@@ -1,0 +1,47 @@
+name: CD-pipeline
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, Linux, ARM64, luis]
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+      
+      - name: Login in Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build and Push the image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: augipro2/messingerbro:1.0.0
+
+      - name: Check and Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+        id: install
+
+      - name: Set Kubernetes Context
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Replace and Apply Kubernetes Manifests
+        uses: swdotcom/update-and-apply-kubernetes-configs@v1
+        with:
+          k8-config-file-paths: |
+            .k8s/00_namespace.yml
+            .k8s/01_deployment.yml
+            .k8s/02_service.yml
+            .k8s/03_ingress.yml
+          replacement-method: defined

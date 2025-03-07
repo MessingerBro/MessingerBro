@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: augusto-luis
+  namespace: m324-csbe-hasenbalg
+  labels:
+    app: augusto-luis
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: augusto-luis
+  template:
+    metadata:
+      labels:
+        app: augusto-luis
+    spec:
+      containers:
+        - name: augusto-luis
+          image: augipro2/messingerbro:1.0.0
+          command:
+            - /bin/sh
+            - "-c"
+            - yarn start
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            failureThreshold: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 3
+            periodSeconds: 5
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            requests:
+              cpu: 25m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 512Mi
