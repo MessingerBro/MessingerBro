@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: augusto-luis
+  namespace: m324-csbe-hasenbalg
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - hasenbalg-fernandez.m324.hackerman.ch
+      secretName: hasenbalg-fernandez.m324.hackerman.ch-tls
+  rules:
+    - host: hasenbalg-fernandez.m324.hackerman.ch
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: augusto-luis
+                port:
+                  number: 80
