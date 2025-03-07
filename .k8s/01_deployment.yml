@@ -18,10 +18,10 @@ spec:
     spec:
       containers:
         - name: augusto-luis
-          image: augipro2/messingerbro:1.0.0
+          image: byluisfer/messingerbro:latest
           command:
             - /bin/sh
-            - "-c"
+            - '-c'
             - yarn start
           startupProbe:
             httpGet:

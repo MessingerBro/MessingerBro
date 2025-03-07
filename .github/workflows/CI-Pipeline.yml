@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    pull_request:
+      branches:
+        - master
 
 jobs:
   docker:
@@ -21,4 +24,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: augipro2/messingerbro:1.0.0
+          tags: byluisfer/messingerbro:latest
